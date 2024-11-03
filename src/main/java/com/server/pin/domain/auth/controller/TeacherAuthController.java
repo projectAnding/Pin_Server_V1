@@ -41,5 +41,4 @@ public class TeacherAuthController {
         return Response.ok("Success");
     }
 
-
 }
