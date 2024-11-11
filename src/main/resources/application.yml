@@ -1,8 +1,10 @@
+# 이거 좀 봐줘라 ㅂㅅ같은 후배련이 모르겠단다 . 부탁함 - 박준현
+ # ㅇㅋ
 spring:
   datasource:
-    url: {server-url}
-    username: {username}
-    password: {password}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -10,13 +12,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  data:
-    redis:
-      host: {REDIS_HOST}
-      port: {REDIS_PORT}
-      password: {REDIS_PASSWORD}
 server:
-  port: {server-port}
+  port: ${SERVER_PORT:8080}
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
