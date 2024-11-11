@@ -35,13 +35,17 @@ jobs:
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
+
             cd ~/app
-            export DATASOURCE_URL="${{ secrets.DATASOURCE_URL }}"
-            export DATASOURCE_USERNAME="${{ secrets.DATASOURCE_USERNAME }}"
-            export DATASOURCE_PASSWORD="${{ secrets.DATASOURCE_PASSWORD }}"
-            export JWT_ACCESS_TOKEN_EXPIRATION="${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}"
-            export JWT_REFRESH_TOKEN_EXPIRATION="${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION }}"
-            export JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}"
-            export SERVER_PORT="${{ secrets.SERVER_PORT }}"
-            ./mvnw clean package -DskipTests
-            java -jar target/your-application.jar
+            chmod +x gradlew
+
+            ./gradlew build -x test
+
+            JAR_FILE=$(ls build/libs/*.jar)
+            if [ -f "$JAR_FILE" ]; then
+              java -jar $JAR_FILE 
+            else
+              echo "No JAR file found, build failed."
+              exit 1
+            fi
+      
