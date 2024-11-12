@@ -2,11 +2,16 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,35 +24,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Copy files via SSH
-        uses: appleboy/scp-action@v0.1.4
+      - name: Gradle Caching
+        uses: actions/cache@v4
         with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USER }}
-          key: ${{ secrets.AWS_SSH_KEY }}
-          source: "."
-          target: "~/app"
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ secrets.runneros }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ secrets.runneros }}-gradle-
 
-      - name: Run remote command
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean bootJar -x test
+          
+      - name: Deploy & Run
         uses: appleboy/ssh-action@master
+        id: deploy
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_SSH_KEY }}
-          timeout: 300s
+          envs: GITHUB_SHA
           script: |
-            sudo apt update
-            sudo apt install openjdk-17-jdk -y
-
-            cd ~/app
-            chmod +x gradlew
-            ./gradlew build -x test
-
-            JAR_FILE=$(ls build/libs/*.jar)
-            if [ -f "$JAR_FILE" ]; then
-              java -jar $JAR_FILE
-            else
-              echo "No JAR file found, build failed."
-              exit 1
-            fi
-      
+            sudo docker rm -f $(docker ps -qa)
+            docker-compose up -d
+            docker image prune -f
