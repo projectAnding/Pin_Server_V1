@@ -78,6 +78,4 @@ jobs:
             
             tmux new-session -d -s myapp_session 'java -jar myapp.jar > app.log 2>&1'
             
-            tail -f /home/ubuntu/app/app.log &
-
             tmux detach -s myapp_session
