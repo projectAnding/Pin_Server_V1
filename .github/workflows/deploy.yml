@@ -37,6 +37,11 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean bootJar -x test
 
+      - name: Set Git User
+        run: |
+          git config --global user.email "seohoon0707@gmail.com"
+          git config --global user.name "Simseoh"
+
       - name: Create a new Git tag
         run: |
           TAG_NAME="v1.0.${{ github.run_number }}"
@@ -48,7 +53,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/myapp.jar  # Gradle 빌드 결과물
+          files: build/libs/myapp.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REF: "refs/tags/${{ env.TAG_NAME }}"  # 정확한 태그 전달
