@@ -72,4 +72,4 @@ jobs:
             sudo pkill -f 'java -jar' || true
             cd /home/ubuntu/app || exit
             wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp.jar -O myapp.jar
-            nohup java -jar myapp.jar > app.log 2>&1 &
+            nohup setsid java -jar myapp.jar > app.log 2>&1 < /dev/null &
