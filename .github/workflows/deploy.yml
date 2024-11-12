@@ -78,4 +78,5 @@ jobs:
             
             tmux new-session -d -s myapp_session 'java -jar myapp.jar > app.log 2>&1'
             
+            tmux send-keys -t myapp_session "tail -f app.log" C-m
             tmux detach -s myapp_session
