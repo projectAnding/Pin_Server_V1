@@ -39,8 +39,8 @@ jobs:
 
       - name: Set Git User
         run: |
-          git config --global user.email "seohoon0707@gmail.com"
-          git config --global user.name "Simseoh"
+          git config --global user.email "your-email@example.com"
+          git config --global user.name "your-username"
 
       - name: Create a new Git tag
         run: |
@@ -48,6 +48,7 @@ jobs:
           git tag $TAG_NAME
           git push origin $TAG_NAME
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+          echo "GITHUB_REF=refs/tags/${TAG_NAME}" >> $GITHUB_ENV  # GITHUB_REF 설정
 
       - name: Create Release
         id: create_release
@@ -56,7 +57,6 @@ jobs:
           files: build/libs/myapp.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: "refs/tags/${{ env.TAG_NAME }}"  # 정확한 태그 전달
 
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
