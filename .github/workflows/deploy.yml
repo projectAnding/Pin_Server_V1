@@ -28,9 +28,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ secrets.runneros }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ secrets.runneros }}-gradle-
+            ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
         run: |
@@ -39,13 +39,9 @@ jobs:
 
       - name: Create a new Git tag
         run: |
-          TAG_NAME="v${{ github.sha }}"
+          TAG_NAME="v1.0.${{ github.run_number }}"
           git tag $TAG_NAME
           git push origin $TAG_NAME
-
-      - name: Set tag name
-        run: |
-          TAG_NAME=${GITHUB_REF##*/}
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
 
       - name: Create Release
@@ -55,7 +51,7 @@ jobs:
           files: build/libs/myapp.jar  # Gradle 빌드 결과물
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ env.TAG_NAME }}  # GITHUB_REF에 태그 이름 전달
+          GITHUB_REF: "refs/tags/${{ env.TAG_NAME }}"  # 정확한 태그 전달
 
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
@@ -64,12 +60,10 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_SSH_KEY }}
-          envs: GITHUB_SHA
           debug: true
           timeout: 10m
           script: |
             sudo pkill -f 'java -jar' || true
             cd /home/ubuntu/app || exit
-            wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp-${{ env.TAG_NAME }}.jar -O myapp.jar
+            wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp.jar -O myapp.jar
             nohup java -jar myapp.jar > app.log 2>&1 &
-            rm -f old_version.jar
