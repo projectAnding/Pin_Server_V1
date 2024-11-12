@@ -37,11 +37,19 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean bootJar -x test
 
+      - name: Create a new Git tag
+        run: |
+          TAG_NAME="v${{ github.sha }}"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: build/libs/myapp.jar # Gradle 빌드 결과물의 경로
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub API 호출을 위한 Token
 
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
@@ -57,7 +65,7 @@ jobs:
             sudo pkill -f 'java -jar' || true
 
             cd /home/ubuntu/app || exit
-            wget https://github.com/${{ secrets.GGITHUB_REPO }}/releases/download/${{ github.sha }}/myapp-${{ github.sha }}.jar -O myapp.jar
+            wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ github.sha }}/myapp-${{ github.sha }}.jar -O myapp.jar
 
             nohup java -jar myapp.jar > app.log 2>&1 &
 
