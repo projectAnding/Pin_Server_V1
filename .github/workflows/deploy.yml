@@ -73,4 +73,5 @@ jobs:
             mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app || exit
             wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp.jar -O myapp.jar
-            nohup java -jar myapp.jar > app.log 2>&1 < /dev/null & disown
+            tmux new-session -d -s myapp_session 'java -jar myapp.jar > app.log 2>&1'
+            tmux detach -s myapp_session
