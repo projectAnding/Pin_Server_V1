@@ -48,12 +48,13 @@ jobs:
           git tag $TAG_NAME
           git push origin $TAG_NAME
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
-          echo "GITHUB_REF=refs/tags/${TAG_NAME}" >> $GITHUB_ENV  # GITHUB_REF 설정
+          echo "GITHUB_REF=refs/tags/${TAG_NAME}" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ env.TAG_NAME }}
           files: build/libs/myapp.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
