@@ -52,10 +52,10 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/myapp.jar  # 빌드 결과물
+          files: build/libs/myapp.jar  # Gradle 빌드 결과물
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ env.TAG_NAME }}
+          GITHUB_REF: ${{ env.TAG_NAME }}  # GITHUB_REF에 태그 이름 전달
 
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
