@@ -70,6 +70,7 @@ jobs:
           timeout: 10m
           script: |
             sudo pkill -f 'java -jar' || true
+            mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app || exit
             wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp.jar -O myapp.jar
-            nohup setsid java -jar myapp.jar > app.log 2>&1 < /dev/null &
+            nohup java -jar myapp.jar > app.log 2>&1 < /dev/null & disown
