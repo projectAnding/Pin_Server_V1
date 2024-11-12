@@ -43,14 +43,19 @@ jobs:
           git tag $TAG_NAME
           git push origin $TAG_NAME
 
+      - name: Set tag name
+        run: |
+          TAG_NAME=${GITHUB_REF##*/}
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/myapp.jar # Gradle 빌드 결과물의 경로
+          files: build/libs/myapp.jar  # 빌드 결과물
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub API 호출을 위한 Token
-          GITHUB_REF: refs/tags/${{ github.sha }} # 태그를 명시적으로 지정
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF: ${{ env.TAG_NAME }}
 
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
@@ -64,10 +69,7 @@ jobs:
           timeout: 10m
           script: |
             sudo pkill -f 'java -jar' || true
-
             cd /home/ubuntu/app || exit
-            wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ github.sha }}/myapp-${{ github.sha }}.jar -O myapp.jar
-
+            wget https://github.com/${{ secrets.GITHUB_REPO }}/releases/download/${{ env.TAG_NAME }}/myapp-${{ env.TAG_NAME }}.jar -O myapp.jar
             nohup java -jar myapp.jar > app.log 2>&1 &
-
             rm -f old_version.jar
