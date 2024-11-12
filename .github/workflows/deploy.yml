@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_SSH_KEY }}
-          timeout: 300  # 타임아웃을 300초(5분)로 설정
+          timeout: 300s
           script: |
             sudo apt update
             sudo apt install openjdk-17-jdk -y
@@ -50,3 +50,4 @@ jobs:
               echo "No JAR file found, build failed."
               exit 1
             fi
+      
