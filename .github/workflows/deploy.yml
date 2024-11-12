@@ -38,10 +38,7 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew clean bootJar -x test
-      
 
-      yaml
-      코드 복사
       - name: Deploy & Run
         uses: appleboy/ssh-action@master
         id: deploy
