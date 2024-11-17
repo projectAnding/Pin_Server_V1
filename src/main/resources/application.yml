@@ -6,12 +6,17 @@ spring:
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connectionTimeout: 30000
+      maxLifetime: 1800000
+      maximumPoolSize: 10
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        transaction.coordinator_class: jdbc
 server:
   port: ${SERVER_PORT:8080}
 
