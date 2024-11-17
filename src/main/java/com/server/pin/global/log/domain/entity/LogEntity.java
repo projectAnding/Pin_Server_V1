@@ -18,8 +18,8 @@ public class LogEntity {
     @Column(nullable = false)
     public String logString;
 
-    @Column(name = "logtype", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "logtype", nullable = false)
     public LogType logType;
 
 }
