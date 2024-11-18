@@ -18,12 +18,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         transaction.coordinator_class: jdbc
 server:
-  port: ${SERVER_PORT:8443}
-  ssl:
-    enabled: ${SSL_ENABLE}
-    key-store: ${ SSL_KEYSTORE }
-    key-store-password: ${ SSL_KEYSTORE_PW }
-    key-store-type: ${ SSL_KEYSTORE_TYPE }
+  port: ${SERVER_PORT:8080}
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
