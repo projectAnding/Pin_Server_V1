@@ -2,9 +2,11 @@ package com.server.pin.domain.user.controller;
 
 import com.server.pin.domain.user.responsedto.UserInfo;
 import com.server.pin.domain.user.service.UserService;
+import com.server.pin.global.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +18,7 @@ public class UserController {
 
     @Operation(summary = "내 정보 확인하기")
     @GetMapping("/getInfo")
-    public UserInfo getStudentInfo(@PathVariable String userId){
-        return userService.getStudentInfo(userId);
+    public ResponseEntity<BaseResponse<UserInfo>> getStudentInfo(@PathVariable String userId){
+        return BaseResponse.of(userService.getStudentInfo(userId), 200, "회원정보 불러오기 성공");
     }
 }

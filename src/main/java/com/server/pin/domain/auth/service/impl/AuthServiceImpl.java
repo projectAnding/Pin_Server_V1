@@ -1,16 +1,17 @@
 package com.server.pin.domain.auth.service.impl;
 
+
+
 import com.server.pin.domain.auth.dto.CheckTeacherApply;
 import com.server.pin.domain.auth.dto.request.LoginRequest;
-import com.server.pin.domain.auth.exception.impl.DetailDepartmentDataTypeWrongException;
-import com.server.pin.domain.auth.exception.impl.IdNotFoundException;
-import com.server.pin.domain.auth.exception.impl.PasswordWrong;
-import com.server.pin.domain.auth.exception.impl.UserAlreadyExistsException;
 import com.server.pin.domain.auth.dto.request.UserSignUpRequest;
+import com.server.pin.domain.auth.dto.response.UserSignUpResponse;
+import com.server.pin.domain.auth.exception.AuthError;
 import com.server.pin.domain.auth.service.AuthService;
 import com.server.pin.domain.user.domain.entity.UserEntity;
 import com.server.pin.domain.user.domain.enums.UserRole;
 import com.server.pin.domain.user.repository.UserRepository;
+import com.server.pin.global.exception.CustomException;
 import com.server.pin.global.security.jwt.dto.Jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +30,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void teacherSignup(UserSignUpRequest request){
+    public UserSignUpResponse teacherSignup(UserSignUpRequest request){
 
         if (userRepository.existsByUserId(request.userId()) || userRepository.existsByEmail(request.email()) || userRepository.existsByPhoneNumber(request.phoneNumber())) {
-            throw UserAlreadyExistsException.INSTANCE;
+            throw new CustomException(AuthError.USER_ALREADY_EXISTS);
         }
 
         UserEntity teacher = UserEntity.builder()
@@ -45,17 +46,17 @@ public class AuthServiceImpl implements AuthService {
                 .role(UserRole.ROLE_WAITING)
                 .build();
 
-        userRepository.save(teacher);
+        return UserSignUpResponse.of(userRepository.save(teacher));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void studentSignup(UserSignUpRequest request) {
+    public UserSignUpResponse studentSignup(UserSignUpRequest request) {
 
         if (userRepository.existsByUserId(request.userId()) || userRepository.existsByEmail(request.email()) || userRepository.existsByPhoneNumber(request.phoneNumber())) {
-            throw UserAlreadyExistsException.INSTANCE;
+            throw new CustomException(AuthError.USER_ALREADY_EXISTS);
         } else if(!(request.detailDepartment().matches("\\d{4}"))) {
-            throw DetailDepartmentDataTypeWrongException.INSTANCE;
+            throw new CustomException(AuthError.DETAILDEPARTMENT_DATA_WRONG);
         }
 
         UserEntity student = UserEntity.builder()
@@ -70,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
 
 
 
-        userRepository.save(student);
+        return UserSignUpResponse.of(userRepository.save(student));
     }
 
     @Override
@@ -81,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void teacherSignUpOk(Long id) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> IdNotFoundException.INSTANCE);
+        UserEntity user = userRepository.findById(id).orElseThrow( () -> new CustomException(AuthError.ID_NOT_FOUND));
         user.setRole(UserRole.ROLE_TEACHER);
 
 //        userRepository.save(user); // optional?
@@ -91,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackFor = Exception.class)
     public void teacherSignUpDeny(Long id) {
         if (!userRepository.existsById(id)) {
-            throw IdNotFoundException.INSTANCE;
+            throw new CustomException(AuthError.ID_NOT_FOUND);
         }
         userRepository.deleteById(id);
     }
@@ -102,13 +103,13 @@ public class AuthServiceImpl implements AuthService {
         String password = request.password();
 
         if (!userRepository.existsByUserId(userId)) {
-            throw IdNotFoundException.INSTANCE;
+            throw new CustomException(AuthError.ID_NOT_FOUND);
         }
 
         UserEntity user = userRepository.findByUserId(userId);
 
         if (!encoder.matches(password, user.getPassword())) {
-            throw PasswordWrong.INSTANCE;
+            throw new CustomException(AuthError.PASSWORD_WRONG);
         }
 
         return null;

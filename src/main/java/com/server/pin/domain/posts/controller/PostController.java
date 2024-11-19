@@ -1,7 +1,8 @@
 package com.server.pin.domain.posts.controller;
 
 import com.server.pin.domain.posts.service.PostService;
-import com.server.pin.global.response.Response;
+import com.server.pin.global.response.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/event")
-    public ResponseEntity<Response> postEventPost() {
+    @Operation(description = "사용금지")
+    public ResponseEntity<BaseResponse<Void>> postEventPost() {
         postService.postEventPost(); // TODO: 구현해야됨
 
-        return Response.ok("Created");
+        return BaseResponse.of(null, 200, "dasdad");
     }
 }

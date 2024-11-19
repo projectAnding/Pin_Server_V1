@@ -1,5 +1,6 @@
 package com.server.pin.domain.user.responsedto;
 
+import com.server.pin.domain.user.domain.entity.UserEntity;
 import lombok.Builder;
 
 @Builder
@@ -13,4 +14,7 @@ public record UserInfo(
         String email,
         String phoneNumber
 ) {
+    public static UserInfo of(UserEntity user) {
+        return new UserInfo(user.getUserId(), user.getUsername(),user.getDetailDepartment(),user.getEmail(),user.getPhoneNumber());
+    }
 }

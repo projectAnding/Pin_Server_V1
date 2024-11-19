@@ -4,7 +4,6 @@ import com.server.pin.domain.posts.domain.enums.PostCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
 
 @Entity
 @Table(name = "TABLE_POST")

@@ -1,13 +1,14 @@
 package com.server.pin.domain.auth.exception;
 
-import com.server.pin.global.exception.ExceptionDetail;
+import com.server.pin.global.exception.CustomError;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum AuthExceptionDetails implements ExceptionDetail {
+public enum AuthError implements CustomError {
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "user already exists"),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "user not found"),
     DETAILDEPARTMENT_DATA_WRONG(HttpStatus.BAD_REQUEST, "detaildepartment data type wrong"),
@@ -16,20 +17,5 @@ public enum AuthExceptionDetails implements ExceptionDetail {
     ;
 
     private final HttpStatus status;
-    private final String detail;
-
-    @Override
-    public HttpStatus getHttpStatus() {
-        return status;
-    }
-
-    @Override
-    public String getMessage() {
-        return name();
-    }
-
-    @Override
-    public String getDetail() {
-        return detail;
-    }
+    private final String message;
 }
