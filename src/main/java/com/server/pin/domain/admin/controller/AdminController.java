@@ -2,9 +2,6 @@ package com.server.pin.domain.admin.controller;
 
 import com.server.pin.domain.admin.service.AdminService;
 import com.server.pin.domain.user.domain.entity.UserEntity;
-import com.server.pin.domain.user.domain.enums.UserRole;
-import com.server.pin.domain.user.repository.UserRepository;
-import com.server.pin.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
