@@ -20,4 +20,11 @@ public class AdminServiceImpl implements AdminService {
     public List<UserEntity> userList() {
         return userRepository.findUsersWithoutRole(UserRole.ROLE_WAITING);
     }
+
+    @Override
+    public Void deleteAllUser() {
+        userRepository.deleteAll();
+        return null;
+    }
+
 }
