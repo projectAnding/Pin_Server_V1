@@ -21,8 +21,8 @@ public class TeacherAuthController {
 
     @Operation(summary = "교사 회원가입 신청자 명단 확인")
     @GetMapping("/applies")
-    public List<CheckTeacherApply> teacherApply() {
-        return authService.getTeacherApplies();
+    public ResponseEntity<BaseResponse<List<CheckTeacherApply>>> teacherApply() {
+        return BaseResponse.of(authService.getTeacherApplies(), 200, "교사 회원가입 신청자 명단 불러오기 성공");
     }
 
     @Operation(summary = "교사 회원가입 신청 거절", description = "거절할 대상의 Id 입력")
