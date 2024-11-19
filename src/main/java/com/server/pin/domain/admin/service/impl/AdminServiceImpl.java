@@ -22,7 +22,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Void deleteAllUser() {
+    public Void deleteAllUsers() {
         userRepository.deleteAll();
         return null;
     }

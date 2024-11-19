@@ -27,6 +27,6 @@ public class AdminController {
     @DeleteMapping("/user/delete/all")
     @Operation(description = "나 말곤 건들지 말 것.")
     public ResponseEntity<BaseResponse<Void>> deleteAll() {
-        return BaseResponse.of(null, 200, "사용자 전체 삭제 성공");
+        return BaseResponse.of(adminService.deleteAllUsers(), 200, "사용자 전체 삭제 성공");
     }
 }
