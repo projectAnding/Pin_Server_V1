@@ -20,13 +20,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntityOptional = userRepository.findByUserId(userId);
 
-        return UserInfo.builder()
-                .userId(userEntityOptional.getUserId())
-                .username(userEntityOptional.getUsername())
-                .detailDepartment(userEntityOptional.getDetailDepartment())
-                .email(userEntityOptional.getEmail())
-                .phoneNumber(userEntityOptional.getPhoneNumber())
-                .build();
+        return UserInfo.of(userEntityOptional);
     }
 
     @Override

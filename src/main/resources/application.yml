@@ -1,5 +1,5 @@
 # 이거 좀 봐줘라 ㅂㅅ같은 후배련이 모르겠단다 . 부탁함 - 박준현
- # ㅇㅋ
+# ㅇㅋ
 spring:
   datasource:
     url: ${DATASOURCE_URL}
