@@ -1,6 +1,7 @@
 package com.server.pin.domain.auth.controller;
 
 import com.server.pin.domain.auth.dto.request.LoginRequest;
+import com.server.pin.domain.auth.dto.request.ReissueRequest;
 import com.server.pin.domain.auth.dto.request.UserSignUpRequest;
 import com.server.pin.domain.auth.dto.response.UserSignUpResponse;
 import com.server.pin.domain.auth.service.AuthService;
@@ -37,11 +38,17 @@ public class AuthController {
 
     // TODO: 로그인 기능
     @Tag(name = "로그인 Auth", description = "로그인 API")
-    @Operation(summary = "로그인", description = "사용금지")
+    @Operation(summary = "로그인", description = "토큰 발급")
     @PostMapping("/login")
     public ResponseEntity<BaseResponse<Jwt>> login(@RequestBody LoginRequest request) {
         return BaseResponse.of(authService.login(request), 200, "로그인 성공");
     }
 
     // TODO: 리이슈 기능
+    @Tag(name = "로그인 Auth", description = "로그인 API")
+    @Operation(summary = "리이슈", description = "토큰 재발급")
+    @PostMapping("/reissue")
+    public ResponseEntity<BaseResponse<Jwt>> reissue(@RequestBody ReissueRequest request) {
+        return BaseResponse.of(authService.reissue(request), 200, "토큰 재발급 성공");
+    }
 }

@@ -1,17 +1,27 @@
 # 이거 좀 봐줘라 ㅂㅅ같은 후배련이 모르겠단다 . 부탁함 - 박준현
- # ㅇㅋ
+# ㅇㅋ
 spring:
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connectionTimeout: 30000
+      maxLifetime: 1800000
+      maximumPoolSize: 10
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
+        transaction.coordinator_class: jdbc
 server:
   port: ${SERVER_PORT:8080}
 
