@@ -55,7 +55,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/auth/teacher/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/auth/teacher/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/auth/signup/**", "/auth/login", "/auth/reissue").anonymous()
+                        .requestMatchers(HttpMethod.POST, "/mailSend", "/auth/signup/**", "/auth/login", "/auth/reissue").anonymous()
+                        .requestMatchers(HttpMethod.GET, "/mailCheck").anonymous()
 
                         .anyRequest().authenticated()
                 )

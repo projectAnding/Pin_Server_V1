@@ -22,6 +22,17 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         transaction.coordinator_class: jdbc
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH}
+          timeout: ${SMTP_TIMEOUT}
+          starttls.enable: ${SMTP_STARTTLS_ENABLE}
 server:
   port: ${SERVER_PORT:8080}
 
