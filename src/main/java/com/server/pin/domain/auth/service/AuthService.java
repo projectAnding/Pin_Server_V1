@@ -2,6 +2,7 @@ package com.server.pin.domain.auth.service;
 
 import com.server.pin.domain.auth.dto.CheckTeacherApply;
 import com.server.pin.domain.auth.dto.request.LoginRequest;
+import com.server.pin.domain.auth.dto.request.ReissueRequest;
 import com.server.pin.domain.auth.dto.request.UserSignUpRequest;
 import com.server.pin.domain.auth.dto.response.UserSignUpResponse;
 import com.server.pin.global.security.jwt.dto.Jwt;
@@ -18,4 +19,6 @@ public interface AuthService {
     Jwt login(LoginRequest request);
     //teacherMyPage
     List<CheckTeacherApply> getTeacherApplies();
+
+    Jwt reissue(ReissueRequest request);
 }

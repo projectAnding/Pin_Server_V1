@@ -4,15 +4,20 @@ package com.server.pin.domain.auth.service.impl;
 
 import com.server.pin.domain.auth.dto.CheckTeacherApply;
 import com.server.pin.domain.auth.dto.request.LoginRequest;
+import com.server.pin.domain.auth.dto.request.ReissueRequest;
 import com.server.pin.domain.auth.dto.request.UserSignUpRequest;
 import com.server.pin.domain.auth.dto.response.UserSignUpResponse;
 import com.server.pin.domain.auth.exception.AuthError;
+import com.server.pin.domain.auth.repository.RefreshTokenRepository;
 import com.server.pin.domain.auth.service.AuthService;
 import com.server.pin.domain.user.domain.entity.UserEntity;
 import com.server.pin.domain.user.domain.enums.UserRole;
 import com.server.pin.domain.user.repository.UserRepository;
 import com.server.pin.global.exception.CustomException;
 import com.server.pin.global.security.jwt.dto.Jwt;
+import com.server.pin.global.security.jwt.enums.JwtType;
+import com.server.pin.global.security.jwt.error.JwtError;
+import com.server.pin.global.security.jwt.provider.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,8 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final JwtProvider jwtProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Override
@@ -99,19 +106,44 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Jwt login(LoginRequest request) {
-        String userId = request.userId();
-        String password = request.password();
+        UserEntity user = userRepository.findById(userRepository.findByUserId(request.userId()).getId())  // email 대신 userId 사용
+                .orElseThrow(() -> new CustomException(AuthError.USER_NOT_FOUND));
 
-        if (!userRepository.existsByUserId(userId)) {
-            throw new CustomException(AuthError.ID_NOT_FOUND);
-        }
-
-        UserEntity user = userRepository.findByUserId(userId);
-
-        if (!encoder.matches(password, user.getPassword())) {
+        if (!encoder.matches(request.password(), user.getPassword())) {
             throw new CustomException(AuthError.PASSWORD_WRONG);
         }
 
-        return null;
+        Jwt token = jwtProvider.generateToken(user);
+
+        refreshTokenRepository.save(user.getUserId(), token.refreshToken());  // email 대신 userId 사용
+
+        return token;
     }
+
+    @Override
+    public Jwt reissue(ReissueRequest request) {
+        if (jwtProvider.getType(request.refreshToken()) != JwtType.REFRESH)
+            throw new CustomException(JwtError.INVALID_TOKEN);
+
+        String userId = jwtProvider.getUserId(request.refreshToken());  // email 대신 userId 사용
+
+        if (!refreshTokenRepository.existsByUserId(userId))  // email 대신 userId 사용
+            throw new CustomException(JwtError.INVALID_TOKEN);
+
+        String refreshToken = refreshTokenRepository.findByUserId(userId)  // email 대신 userId 사용
+                .orElseThrow(() -> new CustomException(JwtError.INVALID_TOKEN));
+
+        if (!refreshToken.equals(request.refreshToken()))
+            throw new CustomException(JwtError.INVALID_TOKEN);
+
+        UserEntity user = userRepository.findById(userRepository.findByUserId(userId).getId())  // email 대신 userId 사용
+                .orElseThrow(() -> new CustomException(AuthError.USER_NOT_FOUND));
+
+        Jwt token = jwtProvider.generateToken(user);
+
+        refreshTokenRepository.save(userId, token.refreshToken());  // email 대신 userId 사용
+
+        return token;
+    }
+
 }
