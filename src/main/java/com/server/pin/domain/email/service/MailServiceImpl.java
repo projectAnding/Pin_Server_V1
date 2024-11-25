@@ -1,24 +1,32 @@
 package com.server.pin.domain.email.service;
 
+import com.server.pin.domain.email.domain.entity.AuthenticationNumber;
 import com.server.pin.domain.email.exception.MailError;
+import com.server.pin.domain.email.repository.MailRepository;
+import com.server.pin.domain.email.response.request.SignUpEmailCheckRequest;
+import com.server.pin.domain.email.response.response.SignUpEmailCheckMailResponse;
+import com.server.pin.domain.email.response.response.SignUpEmailCheckResponse;
 import com.server.pin.global.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
+    private final MailRepository mailRepository;
 
     private final JavaMailSender javaMailSender;
     private static final String senderEmail= "seohoon0707@gmail.com";
     private static int number;
 
     @Override
-    public String sendSignUpEmailCheckMail(String email) {
-        number = (int)(Math.random() * (90000)) + 100000;
+    public SignUpEmailCheckMailResponse sendSignUpEmailCheckMail(String email) {
+        number = (int) ((long)(Math.random() * (90000)) + 100000);
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -46,7 +54,23 @@ public class MailServiceImpl implements MailService {
 
         javaMailSender.send(message);
 
-        return String.valueOf(number);
+        AuthenticationNumber authNum = AuthenticationNumber
+                .builder()
+                .email(email.replace("\"", ""))
+                .number((long) number)
+                .build();
+
+
+        return SignUpEmailCheckMailResponse.of(mailRepository.save(authNum));
+    }
+
+    @Override
+    @Transactional
+    public SignUpEmailCheckResponse sendSignUpEmailCheck(SignUpEmailCheckRequest request) {
+        SignUpEmailCheckResponse emailCheck = SignUpEmailCheckResponse.of(mailRepository.findByEmail(request.email()).getNumber().equals(request.enterNum()));
+        mailRepository.deleteByEmail(request.email());
+
+        return emailCheck;
     }
 }
 
