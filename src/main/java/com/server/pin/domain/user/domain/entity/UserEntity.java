@@ -1,6 +1,8 @@
 package com.server.pin.domain.user.domain.entity;
 
+import com.server.pin.domain.boards.clubBoard.domain.entity.ClubPost;
 import com.server.pin.domain.user.domain.enums.UserRole;
+import com.server.pin.global.common.time.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -8,12 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Getter
-@NoArgsConstructor
 @SuperBuilder
 @Entity
 @Table(name = "users")
-public class UserEntity {
+@NoArgsConstructor
+public class UserEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

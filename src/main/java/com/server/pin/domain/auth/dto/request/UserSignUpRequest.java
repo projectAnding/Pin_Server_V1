@@ -1,6 +1,6 @@
 package com.server.pin.domain.auth.dto.request;
 
-import com.server.pin.global.validator.common.match.valid.NoSpecialValid;
+import com.server.pin.global.common.validator.match.valid.NoSpecialValid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

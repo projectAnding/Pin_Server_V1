@@ -10,15 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/{userId}")
 @RequiredArgsConstructor
 @Tag(name = "User", description = "유저 API")
 public class UserController {
     private final UserService userService;
 
     @Operation(summary = "내 정보 확인하기")
-    @GetMapping("/getInfo")
-    public ResponseEntity<BaseResponse<UserInfo>> getStudentInfo(@PathVariable String userId){
-        return BaseResponse.of(userService.getStudentInfo(userId), 200, "회원정보 불러오기 성공");
+    @GetMapping("/getMyInfo")
+    public ResponseEntity<BaseResponse<UserInfo>> getStudentInfo(){
+        return BaseResponse.of(userService.getStudentInfo(), 200, "회원정보 불러오기 성공");
     }
 }
