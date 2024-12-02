@@ -106,7 +106,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Jwt login(LoginRequest request) {
-        UserEntity user = userRepository.findById(userRepository.findByUserId(request.userId()).getId())  // email 대신 userId 사용
+        UserEntity usertemp = userRepository.findByUserId(request.userId());
+        if (usertemp == null) {
+            throw new CustomException(AuthError.USER_NOT_FOUND);
+        }
+        UserEntity user = userRepository.findById(usertemp.getId())  // email 대신 userId 사용
                 .orElseThrow(() -> new CustomException(AuthError.USER_NOT_FOUND));
 
         if (!encoder.matches(request.password(), user.getPassword())) {
