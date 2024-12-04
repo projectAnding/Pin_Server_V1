@@ -1,4 +1,4 @@
-package com.server.pin.domain.email.response.request;
+package com.server.pin.domain.email.dto.request;
 
 
 public record SignUpEmailCheckRequest(

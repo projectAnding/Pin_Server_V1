@@ -10,6 +10,7 @@ public record CreateClubBoardRequest(
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate period,
         Long memberLimit,
-        String content
+        String content,
+        String imageURL
 ) {
 }

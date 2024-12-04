@@ -2,13 +2,13 @@ package com.server.pin.domain.file.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.server.pin.domain.file.dto.request.UploadImageRequest;
 import com.server.pin.domain.file.exception.FileError;
 import com.server.pin.domain.file.service.FileService;
 import com.server.pin.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -21,15 +21,15 @@ public class FileServiceImpl implements FileService {
     private String bucket;
 
     @Override
-    public String uploadFile(UploadImageRequest request) {
+    public String uploadFile(MultipartFile file) {
         try {
-            String fileName = "club/" + request.postId() + "." + request.file().getOriginalFilename().split("\\.")[1];
+            String fileName = "image/" + file.getOriginalFilename() + "." + file.getOriginalFilename().split("\\.")[1];
 
             ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(request.file().getContentType());
-            metadata.setContentLength(request.file().getSize());
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
 
-            amazonS3Client.putObject(bucket, fileName, request.file().getInputStream(), metadata);
+            amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {

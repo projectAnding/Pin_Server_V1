@@ -1,4 +1,4 @@
-package com.server.pin.domain.email.response.response;
+package com.server.pin.domain.email.dto.response;
 
 import com.server.pin.domain.email.domain.entity.AuthenticationNumber;
 

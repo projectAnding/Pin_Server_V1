@@ -6,8 +6,8 @@ import com.server.pin.domain.boards.clubBoard.dto.response.CreateClubBoardRespon
 import com.server.pin.domain.boards.clubBoard.dto.response.ClubPostDetailResponse;
 import com.server.pin.domain.boards.clubBoard.service.ClubBoardService;
 import com.server.pin.global.response.BaseResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,8 +21,8 @@ public class ClubBoardController {
     public final ClubBoardService clubBoardService;
 
     @PostMapping("/post")
-    public ResponseEntity<BaseResponse<CreateClubBoardResponse>> createClubPost(CreateClubBoardRequest request, @RequestParam("file")MultipartFile file) {
-        return BaseResponse.of(clubBoardService.createClubPost(request, file), 200, "동아리 게시물 생성 완료");
+    public ResponseEntity<BaseResponse<CreateClubBoardResponse>> createClubPost(@RequestBody CreateClubBoardRequest request) { //@RequestPart(value = "file") MultipartFile file,
+        return BaseResponse.of(clubBoardService.createClubPost(request), 200, "동아리 게시물 생성 완료"); //, file
     }
 
     @GetMapping("/{postId}")
