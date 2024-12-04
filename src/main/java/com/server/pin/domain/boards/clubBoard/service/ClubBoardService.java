@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ClubBoardService {
-    CreateClubBoardResponse createClubPost(CreateClubBoardRequest request, MultipartFile file);
+    CreateClubBoardResponse createClubPost(CreateClubBoardRequest request); //, MultipartFile file
     ClubPostDetailResponse getClubPost(Long id);
     List<ClubPostResponse> getClubPosts();
 }

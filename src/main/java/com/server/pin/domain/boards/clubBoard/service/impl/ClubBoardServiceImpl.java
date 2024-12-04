@@ -12,13 +12,11 @@ import com.server.pin.domain.boards.clubBoard.service.ClubBoardService;
 import com.server.pin.domain.boards.enums.PostStatus;
 import com.server.pin.domain.boards.exception.PostError;
 import com.server.pin.domain.file.controller.FileController;
-import com.server.pin.domain.file.dto.request.UploadImageRequest;
 import com.server.pin.global.exception.CustomException;
 import com.server.pin.global.security.holder.SecurityHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class ClubBoardServiceImpl implements ClubBoardService {
 
 
     @Override
-    public CreateClubBoardResponse createClubPost(CreateClubBoardRequest request, MultipartFile file) {
+    public CreateClubBoardResponse createClubPost(CreateClubBoardRequest request) { //, MultipartFile file
 
         ClubPost post = ClubPost.builder()
                 .title(request.title())
@@ -41,18 +39,11 @@ public class ClubBoardServiceImpl implements ClubBoardService {
                 .period(request.period())
                 .memberLimit(request.memberLimit())
                 .content(request.content())
-                .imageURL(null)
+                .imageURL(request.imageURL())
                 .status(PostStatus.POSTING)
                 .build();
 
         post = clubPostRepository.save(post);
-
-        if (file != null && !file.isEmpty()) {
-            UploadImageRequest image = new UploadImageRequest(post.getId(), file);
-            post.setImageURL(fileController.uploadFile(image));
-        } else {
-            post.setImageURL(null);
-        }
 
         try {
             authorMapper.postAuthorMap(post.getId(), securityHolder.getPrincipal().getId(), BoardType.CLUB);
@@ -78,4 +69,5 @@ public class ClubBoardServiceImpl implements ClubBoardService {
     public List<ClubPostResponse> getClubPosts() {
         return clubPostRepository.findAllByStatus(PostStatus.POSTING).stream().map(ClubPostResponse::of).toList();
     }
+
 }

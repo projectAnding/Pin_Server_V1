@@ -3,9 +3,9 @@ package com.server.pin.domain.email.service;
 import com.server.pin.domain.email.domain.entity.AuthenticationNumber;
 import com.server.pin.domain.email.exception.MailError;
 import com.server.pin.domain.email.repository.MailRepository;
-import com.server.pin.domain.email.response.request.SignUpEmailCheckRequest;
-import com.server.pin.domain.email.response.response.SignUpEmailCheckMailResponse;
-import com.server.pin.domain.email.response.response.SignUpEmailCheckResponse;
+import com.server.pin.domain.email.dto.request.SignUpEmailCheckRequest;
+import com.server.pin.domain.email.dto.response.SignUpEmailCheckMailResponse;
+import com.server.pin.domain.email.dto.response.SignUpEmailCheckResponse;
 import com.server.pin.global.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor

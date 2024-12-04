@@ -5,10 +5,12 @@ import com.server.pin.domain.user.domain.enums.UserRole;
 import com.server.pin.global.common.time.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class UserEntity extends BaseTimeEntity {
     String userId;
 
     @Column(nullable = false, name = "username")
+    @Size(min = 1, max = 6, message = "username length wrong")
     String username;
 
     @Column(nullable = false, name = "password")
