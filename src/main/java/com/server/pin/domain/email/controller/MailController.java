@@ -19,7 +19,7 @@ public class MailController {
     // 인증 이메일 전송
     @PostMapping("/mailSend")
     public ResponseEntity<BaseResponse<SignUpEmailCheckMailResponse>> mailSend(@RequestBody MailSendRequest request) {
-        return BaseResponse.of(mailService.sendSignUpEmailCheckMail(request.mail()), 200, "인증이메일 전송 완료");
+        return BaseResponse.of(mailService.sendSignUpEmailCheckMail(request.email()), 200, "인증이메일 전송 완료");
     }
 
     @PostMapping("/mailCheck")
