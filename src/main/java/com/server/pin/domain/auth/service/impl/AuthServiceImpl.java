@@ -43,17 +43,31 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(AuthError.USER_ALREADY_EXISTS);
         }
 
-        UserEntity teacher = UserEntity.builder()
-                .userId(request.userId())
-                .username(request.userName())
-                .password(encoder.encode(request.password()))
-                .detailDepartment(request.detailDepartment())
-                .email(request.email())
-                .phoneNumber(request.phoneNumber())
-                .role(UserRole.ROLE_WAITING)
-                .build();
-
-        return UserSignUpResponse.of(userRepository.save(teacher));
+        if (request.profileImageURL() != null) {
+            UserEntity teacher = UserEntity.builder()
+                    .profileImageURL(request.profileImageURL())
+                    .userId(request.userId())
+                    .username(request.userName())
+                    .password(encoder.encode(request.password()))
+                    .detailDepartment(request.detailDepartment())
+                    .email(request.email())
+                    .phoneNumber(request.phoneNumber())
+                    .role(UserRole.ROLE_WAITING)
+                    .build();
+            return UserSignUpResponse.of(userRepository.save(teacher));
+        } else {
+            UserEntity teacher = UserEntity.builder()
+                    .profileImageURL("https://anding-pin-s3.s3.ap-northeast-2.amazonaws.com/image/%E1%84%80%E1%85%B5%E1%84%87%E1%85%A9%E1%86%AB%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%91%E1%85%B5%E1%86%AF.png.png")
+                    .userId(request.userId())
+                    .username(request.userName())
+                    .password(encoder.encode(request.password()))
+                    .detailDepartment(request.detailDepartment())
+                    .email(request.email())
+                    .phoneNumber(request.phoneNumber())
+                    .role(UserRole.ROLE_WAITING)
+                    .build();
+            return UserSignUpResponse.of(userRepository.save(teacher));
+        }
     }
 
     @Override
@@ -66,19 +80,32 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(AuthError.DETAILDEPARTMENT_DATA_WRONG);
         }
 
-        UserEntity student = UserEntity.builder()
-                .userId(request.userId())
-                .username(request.userName())
-                .password(encoder.encode(request.password()))
-                .detailDepartment(request.detailDepartment())
-                .email(request.email())
-                .phoneNumber(request.phoneNumber())
-                .role(UserRole.ROLE_STUDENT)
-                .build();
+        if (request.profileImageURL() != null) {
+            UserEntity student = UserEntity.builder()
+                    .profileImageURL(request.profileImageURL())
+                    .userId(request.userId())
+                    .username(request.userName())
+                    .password(encoder.encode(request.password()))
+                    .detailDepartment(request.detailDepartment())
+                    .email(request.email())
+                    .phoneNumber(request.phoneNumber())
+                    .role(UserRole.ROLE_STUDENT)
+                    .build();
+            return UserSignUpResponse.of(userRepository.save(student));
+        } else {
+            UserEntity student = UserEntity.builder()
+                    .profileImageURL("https://anding-pin-s3.s3.ap-northeast-2.amazonaws.com/image/%E1%84%80%E1%85%B5%E1%84%87%E1%85%A9%E1%86%AB%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%91%E1%85%B5%E1%86%AF.png.png")
+                    .userId(request.userId())
+                    .username(request.userName())
+                    .password(encoder.encode(request.password()))
+                    .detailDepartment(request.detailDepartment())
+                    .email(request.email())
+                    .phoneNumber(request.phoneNumber())
+                    .role(UserRole.ROLE_STUDENT)
+                    .build();
+            return UserSignUpResponse.of(userRepository.save(student));
+        }
 
-
-
-        return UserSignUpResponse.of(userRepository.save(student));
     }
 
     @Override

@@ -25,6 +25,8 @@ public class UserEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    String profileImageURL;
+
     @Column(unique = true, nullable = false, name = "userid")
     String userId;
 

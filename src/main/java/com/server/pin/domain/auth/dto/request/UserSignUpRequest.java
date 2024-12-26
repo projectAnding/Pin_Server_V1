@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record UserSignUpRequest(
+
+        String profileImageURL,
+
         // 이름, 아이디, 소속, 이메일, 비번, 전번
         // TODO: 특수문자 체크 필요
         @NoSpecialValid

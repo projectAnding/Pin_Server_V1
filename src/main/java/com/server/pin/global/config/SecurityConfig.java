@@ -57,13 +57,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/auth/teacher/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/auth/teacher/**").authenticated()
 
-//                        .requestMatchers(HttpMethod.POST, "/board/club/post").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/mailCheck", "/mailSend", "/auth/signup/**", "/auth/login", "/auth/reissue", "file/upload").anonymous()
+                        .requestMatchers(HttpMethod.GET, "/board/club/list", "/board/club/{boardId}").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/mailCheck", "/mailSend", "/auth/signup/**", "/auth/login", "/auth/reissue").anonymous()
-                        .requestMatchers(HttpMethod.GET, "/board/club/list", "/board/club/{boardId}").anonymous()
-
-                        // 개발중인 기능등 임시 anonymous
-                        .requestMatchers(HttpMethod.POST, "/board/club/post").anonymous()
+                        .requestMatchers(HttpMethod.POST, "/board/club/post").authenticated()
 
                         .anyRequest().authenticated()
                 )
