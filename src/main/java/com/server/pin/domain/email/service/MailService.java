@@ -6,5 +6,5 @@ import com.server.pin.domain.email.dto.response.SignUpEmailCheckResponse;
 
 public interface MailService {
     SignUpEmailCheckMailResponse sendSignUpEmailCheckMail(String mail);
-    SignUpEmailCheckResponse sendSignUpEmailCheck(SignUpEmailCheckRequest request);
+//    SignUpEmailCheckResponse sendSignUpEmailCheck(SignUpEmailCheckRequest request);
 }

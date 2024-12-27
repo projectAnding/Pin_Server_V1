@@ -63,13 +63,13 @@ public class MailServiceImpl implements MailService {
         return SignUpEmailCheckMailResponse.of(mailRepository.save(authNum));
     }
 
-    @Override
-    @Transactional
-    public SignUpEmailCheckResponse sendSignUpEmailCheck(SignUpEmailCheckRequest request) {
-        SignUpEmailCheckResponse emailCheck = SignUpEmailCheckResponse.of(mailRepository.findByEmail(request.email()).getNumber().equals(request.enterNum()));
-        mailRepository.deleteByEmail(request.email());
-
-        return emailCheck;
-    }
+//    @Override
+//    @Transactional
+//    public SignUpEmailCheckResponse sendSignUpEmailCheck(SignUpEmailCheckRequest request) {
+//        SignUpEmailCheckResponse emailCheck = SignUpEmailCheckResponse.of(mailRepository.findByEmail(request.email()).getNumber().equals(request.enterNum()));
+//        mailRepository.deleteByEmail(request.email());
+//
+//        return emailCheck;
+//    }
 }
 

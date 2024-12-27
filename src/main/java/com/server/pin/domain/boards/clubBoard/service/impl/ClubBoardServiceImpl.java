@@ -1,7 +1,5 @@
 package com.server.pin.domain.boards.clubBoard.service.impl;
 
-import com.server.pin.domain.boards.boardAuthorMapper.controller.BoardAuthorMapperController;
-import com.server.pin.domain.boards.boardAuthorMapper.domain.enums.BoardType;
 import com.server.pin.domain.boards.clubBoard.domain.entity.ClubPost;
 import com.server.pin.domain.boards.clubBoard.dto.request.CreateClubBoardRequest;
 import com.server.pin.domain.boards.clubBoard.dto.response.ClubPostDetailResponse;
@@ -27,7 +25,6 @@ public class ClubBoardServiceImpl implements ClubBoardService {
     private final ClubPostRepository clubPostRepository;
     private final FileController fileController;
     private final SecurityHolder securityHolder;
-    private final BoardAuthorMapperController authorMapper;
 
 
     @Override
@@ -43,13 +40,6 @@ public class ClubBoardServiceImpl implements ClubBoardService {
                 .status(PostStatus.POSTING)
                 .build();
 
-        post = clubPostRepository.save(post);
-
-        try {
-            authorMapper.postAuthorMap(post.getId(), securityHolder.getPrincipal().getId(), BoardType.CLUB);
-        } catch (CustomException e) {
-            throw new CustomException(PostError.POST_AUTHOR_MAP_FAILED);
-        }
 
         return CreateClubBoardResponse.of(clubPostRepository.save(post));
     }

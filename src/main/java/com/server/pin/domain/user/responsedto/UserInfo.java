@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public record UserInfo(
 
+        String profileImageURL,
         String userId,
         String username,
 
@@ -15,6 +16,6 @@ public record UserInfo(
         String phoneNumber
 ) {
     public static UserInfo of(UserEntity user) {
-        return new UserInfo(user.getUserId(), user.getUsername(),user.getDetailDepartment(),user.getEmail(),user.getPhoneNumber());
+        return new UserInfo(user.getProfileImageURL(), user.getUserId(), user.getUsername(),user.getDetailDepartment(),user.getEmail(),user.getPhoneNumber());
     }
 }

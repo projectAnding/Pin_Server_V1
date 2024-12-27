@@ -52,15 +52,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/admin/**").permitAll()
                         .requestMatchers("/admin/**").authenticated()
 
-                        .requestMatchers(HttpMethod.GET, "/getMyInfo").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/getMyInfo", "/board/job/{postId}", "/board/job/candidates").authenticated()
 
-                        .requestMatchers(HttpMethod.DELETE, "/auth/teacher/**").authenticated()
-                        .requestMatchers(HttpMethod.PATCH, "/auth/teacher/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/auth/teacher/**", "/board/job/application/agree").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/auth/teacher/**", "/board/job/application/deny").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/mailCheck", "/mailSend", "/auth/signup/**", "/auth/login", "/auth/reissue", "file/upload").anonymous()
-                        .requestMatchers(HttpMethod.GET, "/board/club/list", "/board/club/{boardId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/board/club/list", "/board/club/{boardId}", "/board/job").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/board/club/post").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/board/club/post", "/board/job", "/board/job/{postId}/application").authenticated()
 
                         .anyRequest().authenticated()
                 )
