@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +41,8 @@ public class JobPost extends BaseTimeEntity {
 
     private String content;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id")
     public List<JobPostApplicant> applicants  = new ArrayList<>();
 
@@ -48,5 +51,9 @@ public class JobPost extends BaseTimeEntity {
     }
     public Long nowMember() {
         return (this.applicants != null) ? (long) this.applicants.size() : 0;
+    }
+
+    public void deleteApplicant(JobPostApplicant applicant) {
+        this.applicants.remove(applicant);
     }
 }

@@ -63,7 +63,7 @@ public class JobBoardController {
 
     @GetMapping("/candidates")
     @Operation(summary = "신청자 리스트 조회(승인된 인원은 앞쪽으로 정렬)", description = "마이페이지용")
-    public ResponseEntity<BaseResponse<JobPostApplicantsResponse>> getCandidateJob(@RequestBody GetApplicantsRequest request) {
-        return BaseResponse.of(jobBoardService.getApplicants(request.postId()), 200, "신청자 리스트 조회 성공");
+    public ResponseEntity<BaseResponse<JobPostApplicantsResponse>> getCandidateJob(@RequestParam Long postId) {
+        return BaseResponse.of(jobBoardService.getApplicants(postId), 200, "신청자 리스트 조회 성공");
     }
 }

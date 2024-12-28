@@ -1,6 +1,7 @@
 package com.server.pin.domain.boards.jobBoard.dto.response;
 
 import com.server.pin.domain.boards.jobBoard.domain.entity.JobPostApplicant;
+import com.server.pin.domain.boards.jobBoard.domain.enums.ApplicantStatus;
 import com.server.pin.domain.user.domain.entity.UserEntity;
 import com.server.pin.domain.user.repository.UserRepository;
 
@@ -12,10 +13,11 @@ public record JobPostApplicantResponse(
         String detailDepartment, // 학번
 
         String email,
-        String phoneNumber
+        String phoneNumber,
+        ApplicantStatus status
 ) {
     public static JobPostApplicantResponse of(JobPostApplicant jobPostApplicant, UserRepository userRepository) {
         UserEntity user = userRepository.findById(jobPostApplicant.getApplicantId()).get();
-        return new JobPostApplicantResponse(user.getProfileImageURL(), user.getUserId(), user.getUsername(), user.getDetailDepartment(), user.getEmail(), user.getPhoneNumber());
+        return new JobPostApplicantResponse(user.getProfileImageURL(), user.getUserId(), user.getUsername(), user.getDetailDepartment(), user.getEmail(), user.getPhoneNumber(), jobPostApplicant.getStatus());
     }
 }
